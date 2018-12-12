@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # venue_booking
 
 A venue booking application
@@ -14,3 +15,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our 
 [online documentation](https://flutter.io/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.
+=======
+# flutter_venue_booking
+
+>>>>>>> c03cfc6440e01521ade306b948cd22f9f2ceb3fc
