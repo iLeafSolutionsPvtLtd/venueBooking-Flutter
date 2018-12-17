@@ -4,7 +4,7 @@ import 'package:flutter_places_dialog/flutter_places_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import './second_screen.dart';
+import './booking_view.dart';
 
 class SelectLocationView extends StatefulWidget {
   @override
@@ -103,7 +103,7 @@ class _selectLocationState extends State<SelectLocationView> {
                     if (_place != null) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SecondScreen()),
+                        MaterialPageRoute(builder: (context) => BookingView()),
                       );
                     } else {
                       Fluttertoast.showToast(
