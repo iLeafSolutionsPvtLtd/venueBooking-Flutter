@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:rect_getter/rect_getter.dart';
 
 class DateSelector extends StatefulWidget {
   @override
@@ -180,16 +183,74 @@ class TimeslotSelectionView extends StatefulWidget {
 class _TimeslotSelectionViewState extends State<TimeslotSelectionView> {
   TabController _controller;
   List tabNames = ['Ground 1', 'Ground 2', 'Ground 3', 'Ground 4', 'Ground 5'];
+  ScrollController _scroll_controller = new ScrollController();
+  var _selectedTimeslot = 5;
+  var _keys = {};
+
+  TextStyle a = TextStyle(
+      color: const Color(0xff000000),
+      fontWeight: FontWeight.w700,
+      fontFamily: "GoogleSans",
+      fontStyle: FontStyle.normal,
+      fontSize: 15.0);
+  TextStyle b = TextStyle(
+      color: const Color(0xff000000),
+      fontWeight: FontWeight.w500,
+      fontFamily: "GoogleSans",
+      fontStyle: FontStyle.normal,
+      fontSize: 13.3);
+
+  Icon downArrow = Icon(
+    Icons.details,
+    color: Colors.green,
+  );
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
-//  @override
-//  void initState() {
-//    super.initState();
-//    _controller = new TabController(length: tabNames.length, vsync: this);
-//  }
+
+  var listViewKey = RectGetter.createGlobalKey();
+  var timeSlotMarker = RectGetter.createGlobalKey();
+
+  List getVisibleKeys() {
+    /// First, get the rect of ListView, and then traver the _keys
+    /// get rect of each item by keys in _keys, and if this rect in the range of ListView's rect,
+    /// add the index into result list.
+    var rect = RectGetter.getRectFromKey(listViewKey);
+    var _items = [];
+
+    _keys.forEach((index, key) {
+      // print(_keys);
+      var itemRect = RectGetter.getRectFromKey(key);
+      if (itemRect != null &&
+          !(itemRect.top > rect.bottom || itemRect.bottom < rect.top))
+        _items.add(key);
+    });
+
+    /// so all visible item's index are in this _items.
+    return _items;
+  }
+
+  List<int> getVisible() {
+    /// First, get the rect of ListView, and then traver the _keys
+    /// get rect of each item by keys in _keys, and if this rect in the range of ListView's rect,
+    /// add the index into result list.
+    var rect = RectGetter.getRectFromKey(listViewKey);
+    var _items = <int>[];
+
+    _keys.forEach((index, key) {
+      //print(key);
+      var itemRect = RectGetter.getRectFromKey(key);
+      if (itemRect != null &&
+          !(itemRect.top > rect.bottom || itemRect.bottom < rect.top))
+        _items.add(index);
+    });
+
+    /// so all visible item's index are in this _items.
+    return _items;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -248,7 +309,7 @@ class _TimeslotSelectionViewState extends State<TimeslotSelectionView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    height: 20,
+                    height: 15,
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -269,9 +330,9 @@ class _TimeslotSelectionViewState extends State<TimeslotSelectionView> {
                       child: Column(
                         children: <Widget>[
                           Center(
-                            child: Icon(
-                              Icons.details,
-                              color: Colors.green,
+                            child: RectGetter(
+                              key: timeSlotMarker,
+                              child: downArrow,
                             ),
                           ),
                           Container(
@@ -280,25 +341,42 @@ class _TimeslotSelectionViewState extends State<TimeslotSelectionView> {
                             margin: EdgeInsets.only(left: 15.0, right: 15.0),
                           ),
                           Container(
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.all(20.0),
-                              itemBuilder: (context, index) {
-                                return Container(
-                                    margin: EdgeInsets.only(
-                                        left: 10.0, right: 10.0),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          '!',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Text('10.00')
-                                      ],
-                                    ));
-                              },
-                              itemCount: 10,
-                            ),
+                            child: PageView.builder(
+                                controller:
+                                    PageController(viewportFraction: 0.15),
+                                onPageChanged: (selectedIndex) {
+                                  setState(() {
+                                    _selectedTimeslot = selectedIndex;
+                                  });
+                                },
+                                itemBuilder: (context, index) {
+                                  _keys[index] = RectGetter.createGlobalKey();
+
+                                  return RectGetter(
+                                      key: _keys[index],
+                                      child: Container(
+                                          margin: EdgeInsets.only(
+                                              left: 10.0, right: 10.0),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                '!',
+                                                textAlign: TextAlign.center,
+                                                style:
+                                                    _selectedTimeslot == index
+                                                        ? a
+                                                        : b,
+                                              ),
+                                              Text(
+                                                '10.00',
+                                                style:
+                                                    _selectedTimeslot == index
+                                                        ? a
+                                                        : b,
+                                              )
+                                            ],
+                                          )));
+                                }),
 //                            decoration: BoxDecoration(color: Colors.blue),
                             height: 100,
                           )
