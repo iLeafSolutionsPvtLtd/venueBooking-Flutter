@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:venue_booking/views/BottomSectionView.dart';
-import 'package:venue_booking/views/custom_navigation_bar.dart';
-import 'package:venue_booking/views/test.dart';
+import 'package:venue_booking/Modules/Booking/BottomSectionView.dart';
+import 'package:venue_booking/Modules/Booking/booking_base_view.dart';
+import 'package:venue_booking/Modules/NavigationBar/custom_navigation_bar.dart';
 
 class BookingView extends StatelessWidget {
   final today = DateTime.now();

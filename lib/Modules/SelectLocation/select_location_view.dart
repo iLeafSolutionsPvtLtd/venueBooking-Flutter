@@ -3,10 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_places_dialog/flutter_places_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:venue_booking/Modules/Booking/booking_view.dart';
 
-import './booking_view.dart';
+import 'select_location_bloc.dart';
 
-class SelectLocationView extends StatefulWidget {
+class GetLocationView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -14,7 +15,7 @@ class SelectLocationView extends StatefulWidget {
   }
 }
 
-class _selectLocationState extends State<SelectLocationView> {
+class _selectLocationState extends State<GetLocationView> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   final myController = TextEditingController();
@@ -79,14 +80,24 @@ class _selectLocationState extends State<SelectLocationView> {
                     child: Container(
                   //height: 100.0,
                   padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                  child: TextField(
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(new FocusNode());
-                      showPlacePicker();
+                  child: StreamBuilder<PlaceDetails>(
+                    stream: selectLocationBloc.placeDetails,
+                    builder: (context, snapshot) {
+                      myController.text =
+                          snapshot.hasData ? snapshot.data.address : "";
+                      return TextField(
+                        onTap: () {
+                          selectLocationBloc.fetchLocation();
+                          if (snapshot.hasData) {}
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                        },
+                        controller: myController,
+                        focusNode: _focus,
+                        decoration: InputDecoration(
+                          hintText: 'Select location',
+                        ),
+                      );
                     },
-                    controller: myController,
-                    focusNode: _focus,
-                    decoration: InputDecoration(hintText: 'Select location'),
                   ),
                 ))
               ],
@@ -100,7 +111,7 @@ class _selectLocationState extends State<SelectLocationView> {
               children: <Widget>[
                 RawMaterialButton(
                   onPressed: () {
-                    if (_place != null) {
+                    if (selectLocationBloc.locationCheck == true) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => BookingView()),

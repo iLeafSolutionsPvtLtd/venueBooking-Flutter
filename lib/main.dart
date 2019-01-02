@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
-import './views/select_location_view.dart';
+import 'package:venue_booking/Modules/SelectLocation/select_location_view.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,27 +19,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var products;
-
-  void _getData() async {
-    final url = 'https://jsonplaceholder.typicode.com/posts';
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      final map = json.decode(response.body);
-      setState(() {
-        this.products = map;
-      });
-      print(map);
-    }
-  }
-
   // empty container
-
   Widget emptyContainer = Container(
     height: 64.0,
   );
-  // title section
 
+  // title section
   Widget titleSection = Container(
     padding: EdgeInsets.all(15.0),
     child: Text("Hi there! \nWhere are you from?",
@@ -79,7 +60,7 @@ class _MyAppState extends State<MyApp> {
           emptyContainer,
           titleSection,
           subTitleSection,
-          SelectLocationView()
+          GetLocationView()
         ],
       )),
     );

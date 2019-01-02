@@ -17,6 +17,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="venue_booking"
         android:icon="@mipmap/ic_launcher">
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
