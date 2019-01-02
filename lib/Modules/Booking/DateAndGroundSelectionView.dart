@@ -193,6 +193,7 @@ class _TimeslotSelectionViewState extends State<TimeslotSelectionView> {
       fontFamily: "GoogleSans",
       fontStyle: FontStyle.normal,
       fontSize: 15.0);
+
   TextStyle b = TextStyle(
       color: const Color(0xff000000),
       fontWeight: FontWeight.w500,

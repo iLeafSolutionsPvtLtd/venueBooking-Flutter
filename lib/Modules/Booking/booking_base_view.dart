@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './DateAndGroundSelectionView.dart';
+import 'package:venue_booking/Modules/Booking/DateAndGroundSelectionView.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
