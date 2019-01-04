@@ -61,9 +61,6 @@ class _CustomNavigationBarWithLocationState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      height: 34.0,
-                    ),
-                    Container(
                       padding: EdgeInsets.only(left: 15.0),
                       child: navigationBarTitle,
                     ),

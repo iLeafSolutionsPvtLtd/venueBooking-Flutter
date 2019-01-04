@@ -96,14 +96,16 @@ class BookingView extends StatelessWidget {
     return new DefaultTabController(
         length: tabNames.length,
         child: Scaffold(
-            body: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              CustomNavigationBarWithLocation("ABC venue", "Kochi"),
-              MyHomePage(),
-              BottomSectionView(),
-            ],
+            body: SafeArea(
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CustomNavigationBarWithLocation("ABC venue", "Kochi"),
+                MyHomePage(),
+                BottomSectionView(),
+              ],
+            ),
           ),
         )));
   }

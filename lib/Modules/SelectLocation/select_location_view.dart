@@ -1,61 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_places_dialog/flutter_places_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:venue_booking/Modules/Booking/booking_view.dart';
+import 'package:venue_booking/Modules/MobileNumberValidation/add_mobile_number.dart';
 
 import 'select_location_bloc.dart';
 
-class GetLocationView extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _selectLocationState();
-  }
-}
-
-class _selectLocationState extends State<GetLocationView> {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
+class GetLocationView extends StatelessWidget {
   final myController = TextEditingController();
-  FocusNode _focus = new FocusNode();
+  final FocusNode _focus = new FocusNode();
   var _place;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  Widget build(BuildContext context) {
     FlutterPlacesDialog.setGoogleApiKey(
         "AIzaSyDU1U59046QEcj-x8jgHQFz2yVf8OHlcbw");
-
-    //_focus.addListener(_onFocusChange);
-  }
-
-  showPlacePicker() async {
-    var place;
-    final SharedPreferences prefs = await _prefs;
-
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      place = await FlutterPlacesDialog.getPlacesDialog();
-    } on PlatformException {
-      place = null;
-    }
-    if (!mounted) return;
-
-    print("$place");
-    setState(() {
-      _place = place;
-      prefs.setString('location', place.toString());
-      print(prefs.get('location'));
-      myController.text = place.address;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
         padding: EdgeInsets.all(10.0),
         child: Column(
@@ -83,6 +41,7 @@ class _selectLocationState extends State<GetLocationView> {
                   child: StreamBuilder<PlaceDetails>(
                     stream: selectLocationBloc.placeDetails,
                     builder: (context, snapshot) {
+                      _place = snapshot.data;
                       myController.text =
                           snapshot.hasData ? snapshot.data.address : "";
                       return TextField(
@@ -111,10 +70,10 @@ class _selectLocationState extends State<GetLocationView> {
               children: <Widget>[
                 RawMaterialButton(
                   onPressed: () {
-                    if (selectLocationBloc.locationCheck == true) {
+                    if (_place != null) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => BookingView()),
+                        MaterialPageRoute(builder: (context) => AddMobile()),
                       );
                     } else {
                       Fluttertoast.showToast(
@@ -138,6 +97,5 @@ class _selectLocationState extends State<GetLocationView> {
             )
           ],
         ));
-    ;
   }
 }
