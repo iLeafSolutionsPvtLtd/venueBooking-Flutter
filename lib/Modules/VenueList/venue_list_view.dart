@@ -8,8 +8,12 @@ class VenueListView extends StatelessWidget {
       home: Stack(
         children: <Widget>[
           Pages(
-            viewModel: PageViewModel(Colors.blue, "assets/phoneMessageIcon.png",
-                "Hotels", "This is body", null),
+            viewModel:pages[2],
+            percentVisible: 1.0,
+          ),
+          Pages(
+            viewModel: pages[0],
+            percentVisible: 1.0,
           )
         ],
       ),
