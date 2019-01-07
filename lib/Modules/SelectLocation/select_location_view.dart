@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_places_dialog/flutter_places_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:venue_booking/Modules/MobileNumberValidation/add_mobile_number.dart';
+import 'package:venue_booking/Modules/MobileNumberValidation/add_mobile_number_view.dart';
 
 import 'select_location_bloc.dart';
 
@@ -73,7 +73,8 @@ class GetLocationView extends StatelessWidget {
                     if (_place != null) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AddMobile()),
+                        MaterialPageRoute(
+                            builder: (context) => AddMobileView()),
                       );
                     } else {
                       Fluttertoast.showToast(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:venue_booking/Modules/MobileNumberValidation/add_mobile_bloc.dart';
+import 'package:venue_booking/Modules/VerifyOTP/verify_otp_view.dart';
 
-class AddMobile extends StatelessWidget {
+class AddMobileView extends StatelessWidget {
   final myController = TextEditingController();
 
   final Widget title = Container(
@@ -34,6 +35,9 @@ class AddMobile extends StatelessWidget {
         body: SafeArea(
             child: ListView(
           children: <Widget>[
+            Container(
+              height: 64,
+            ),
             title,
             subTitile,
             Container(
@@ -58,6 +62,7 @@ class AddMobile extends StatelessWidget {
                         ),
                         Flexible(
                             child: Container(
+                                height: 50,
                                 padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                                 child: StreamBuilder(
                                   stream: addMobileNumberBloc.mobileNumber,
@@ -90,7 +95,8 @@ class AddMobile extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  AddMobile()),
+                                                  VerifyOTPView(
+                                                      myController.text)),
                                         )
                                       : null,
                                   child: new Icon(

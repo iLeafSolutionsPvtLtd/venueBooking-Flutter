@@ -20,10 +20,19 @@ mixin Validators {
   });
   var mobileNumberValidator = StreamTransformer<String, String>.fromHandlers(
       handleData: (mobile, sink) {
-    if (mobile.length == 10) {
+    if (mobile.length >= 10) {
       sink.add(mobile);
     } else {
       sink.addError("Enter a valid mobile number.");
+    }
+  });
+
+  var otpValidator = StreamTransformer<String, String>.fromHandlers(
+      handleData: (mobile, sink) {
+    if (mobile.length >= 4) {
+      sink.add(mobile);
+    } else {
+      sink.addError("Enter a valid 4 digit OTP.");
     }
   });
 }
