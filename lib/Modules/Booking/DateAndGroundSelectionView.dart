@@ -215,44 +215,6 @@ class _TimeslotSelectionViewState extends State<TimeslotSelectionView> {
   var listViewKey = RectGetter.createGlobalKey();
   var timeSlotMarker = RectGetter.createGlobalKey();
 
-  List getVisibleKeys() {
-    /// First, get the rect of ListView, and then traver the _keys
-    /// get rect of each item by keys in _keys, and if this rect in the range of ListView's rect,
-    /// add the index into result list.
-    var rect = RectGetter.getRectFromKey(listViewKey);
-    var _items = [];
-
-    _keys.forEach((index, key) {
-      // print(_keys);
-      var itemRect = RectGetter.getRectFromKey(key);
-      if (itemRect != null &&
-          !(itemRect.top > rect.bottom || itemRect.bottom < rect.top))
-        _items.add(key);
-    });
-
-    /// so all visible item's index are in this _items.
-    return _items;
-  }
-
-  List<int> getVisible() {
-    /// First, get the rect of ListView, and then traver the _keys
-    /// get rect of each item by keys in _keys, and if this rect in the range of ListView's rect,
-    /// add the index into result list.
-    var rect = RectGetter.getRectFromKey(listViewKey);
-    var _items = <int>[];
-
-    _keys.forEach((index, key) {
-      //print(key);
-      var itemRect = RectGetter.getRectFromKey(key);
-      if (itemRect != null &&
-          !(itemRect.top > rect.bottom || itemRect.bottom < rect.top))
-        _items.add(index);
-    });
-
-    /// so all visible item's index are in this _items.
-    return _items;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Expanded(

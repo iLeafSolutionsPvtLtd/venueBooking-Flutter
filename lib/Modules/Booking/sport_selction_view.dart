@@ -67,16 +67,6 @@ class _SportsSelectionViewState extends State<SportsSelectionView> {
               );
             },
           ),
-
-//          ListView(
-//            scrollDirection: Axis.horizontal,
-//
-//            children: <Widget>[
-//              Text('asdasdas'),
-//              Text('erewrre'),
-//              Text('adasdadasd')
-//            ],
-//          ),
         )
       ],
     );
