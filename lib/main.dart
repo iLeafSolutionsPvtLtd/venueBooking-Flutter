@@ -6,6 +6,6 @@ void main() => runApp(VenueBookingMain());
 class VenueBookingMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return VenueListView();
+    return VenueListingView();
   }
 }

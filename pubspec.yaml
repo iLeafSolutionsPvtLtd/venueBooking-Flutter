@@ -25,6 +25,7 @@ dependencies:
   intl: ^0.15.7
   rect_getter: ^0.0.1
   rxdart: ^0.20.0
+  slide_container: ^1.0.7
 
 dev_dependencies:
   flutter_test:

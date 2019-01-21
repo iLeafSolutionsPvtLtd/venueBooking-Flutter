@@ -1,34 +1,41 @@
-import 'dart:async';
-
 import 'package:rxdart/rxdart.dart';
-import 'package:venue_booking/Modules/MobileNumberValidation/add_mobile_bloc.dart';
-import 'package:venue_booking/Modules/VenueList/page_dragger.dart';
 
-class VenueListBloc extends Object
-    with VenueListValidators
-    implements BaseBloc {
-  final venueListController = BehaviorSubject<SlideUpdate>();
-  Stream<SlideUpdate> get venueListStream =>
-      venueListController.stream.transform(slideUpdateValidator);
+class VenueMapViewBloc {
+  final listController = BehaviorSubject<bool>();
+  final mapController = BehaviorSubject<bool>();
+  final opacityController = BehaviorSubject<double>();
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
+  Stream<double> get opacityStream => opacityController.stream;
+  Stream<bool> get listControlStream => listController.stream;
+  Stream<bool> get mapControlStream => mapController.stream;
+
+  Function(double) get opacityChanged => opacityController.sink.add;
+  slideComplete(bool status) {
+    listController.sink.add(status);
+  }
+
+  dispose() {
+    listController.close();
+    mapController.close();
+    opacityController.close();
   }
 }
 
-final venueListBloc = VenueListBloc();
+class VenueListBloc {
+  final listController = BehaviorSubject<bool>();
+  final opacityController = BehaviorSubject<double>();
+  Stream<double> get opacityStream => opacityController.stream;
+  Stream<bool> get listControlStream => listController.stream;
+  Function(double) get opacityChanged => opacityController.sink.add;
+  slideComplete(bool status) {
+    listController.sink.add(status);
+  }
 
-mixin VenueListValidators {
-  var slideUpdateValidator =
-      StreamTransformer<SlideUpdate, SlideUpdate>.fromHandlers(
-          handleData: (slideUpdate, sink) {
-    if (slideUpdate.updateType == UpdateType.doneDragging) {
-      sink.add(SlideUpdate(UpdateType.doneDragging, SlideDirection.none, 0.0,
-          slideUpdate.activeIndex, slideUpdate.nextIndex));
-      print('handler working');
-    } else {
-      sink.add(slideUpdate);
-    }
-  });
+  dispose() {
+    listController.close();
+    opacityController.close();
+  }
 }
+
+final venueMapviewBloc = VenueMapViewBloc();
+final venueListViewBloc = VenueListBloc();
