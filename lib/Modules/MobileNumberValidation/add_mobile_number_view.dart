@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:progress_hud/progress_hud.dart';
 import 'package:venue_booking/Modules/Blocks/blocProvider.dart';
+import 'package:venue_booking/Modules/MobileNumberValidation/add_mobile_api.dart';
 import 'package:venue_booking/Modules/MobileNumberValidation/add_mobile_bloc.dart';
 import 'package:venue_booking/Modules/VerifyOTP/verify_otp_view.dart';
 
@@ -36,6 +37,23 @@ class AddMobileView extends StatelessWidget {
               fontStyle: FontStyle.normal,
               fontSize: 16.7)));
 
+  Widget baseView() => Stack(
+        children: <Widget>[
+          ListView(
+            children: <Widget>[
+              Container(
+                height: 64,
+              ),
+              title,
+              subTitile,
+              AddMobileBaseView(),
+            ],
+          ),
+          _progressHUD,
+//                  Container(height: 300, width: 300, child: _progressHUD)
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AddMobileBloc>(
@@ -48,21 +66,25 @@ class AddMobileView extends StatelessWidget {
         theme: ThemeData.fallback(),
         home: Scaffold(
           body: SafeArea(
-              child: Stack(
-            children: <Widget>[
-              ListView(
-                children: <Widget>[
-                  Container(
-                    height: 64,
-                  ),
-                  title,
-                  subTitile,
-                  AddMobileBaseView(),
-                ],
-              ),
-              _progressHUD,
-//                  Container(height: 300, width: 300, child: _progressHUD)
-            ],
+              child: FutureBuilder(
+            future: AddMobileApi("").verifyOtp(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  if (snapshot.hasData) {
+                    _progressHUD.state.show();
+                  }
+                  return baseView();
+                case ConnectionState.done:
+                  if (snapshot.hasData) {
+                    _progressHUD.state.dismiss();
+                  }
+                  return baseView();
+
+                default:
+                  return baseView();
+              }
+            },
           )),
         ),
       ),
