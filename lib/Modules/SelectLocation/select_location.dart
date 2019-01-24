@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:venue_booking/Modules/Blocks/blocProvider.dart';
+import 'package:venue_booking/Modules/SelectLocation/select_location_bloc.dart';
 import 'package:venue_booking/Modules/SelectLocation/select_location_view.dart';
 
-class SelectLocationView extends StatelessWidget {
+class SelectLocationView extends StatefulWidget {
   // empty container
+  @override
+  SelectLocationViewState createState() {
+    return new SelectLocationViewState();
+  }
+}
+
+class SelectLocationViewState extends State<SelectLocationView> {
   final Widget emptyContainer = Container(
     height: 64.0,
   );
 
-  // title section
   final Widget titleSection = Container(
     padding: EdgeInsets.all(15.0),
     child: Text("Hi there! \nWhere are you from?",
@@ -19,7 +27,6 @@ class SelectLocationView extends StatelessWidget {
             fontSize: 33.0)),
   );
 
-  // subtitle section
   final Widget subTitleSection = Container(
     padding: EdgeInsets.all(15.0),
     child: Text(
@@ -34,19 +41,24 @@ class SelectLocationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          body: SafeArea(
-        child: ListView(
-          children: <Widget>[
-            emptyContainer,
-            titleSection,
-            subTitleSection,
-            GetLocationView()
-          ],
-        ),
-      )),
-    );
+    return BlocProvider<SelectLocationBloc>(
+        builder: (_, bloc) {
+          return bloc ?? SelectLocationBloc();
+        },
+        onDispose: (_, bloc) => bloc.dispose(),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: Scaffold(
+              body: SafeArea(
+            child: ListView(
+              children: <Widget>[
+                emptyContainer,
+                titleSection,
+                subTitleSection,
+                GetLocationView()
+              ],
+            ),
+          )),
+        ));
   }
 }

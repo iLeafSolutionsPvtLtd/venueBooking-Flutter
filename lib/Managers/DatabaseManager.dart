@@ -31,20 +31,7 @@ class DatabaseManager {
   void _onCreate(Database db, int version) async {
     await db.execute(
         "CREATE TABLE User(id INTEGER PRIMARY KEY, email TEXT, phone TEXT, first_name TEXT,  last_name TEXT, avatar TEXT, user_type TEXT, location TEXT)");
-    print("User Table is created");
+    await db.execute(
+        "CREATE TABLE Location(id INTEGER PRIMARY KEY, latitude TEXT, longitude TEXT, name TEXT, userId TEXT, FOREIGN KEY(userId) REFERENCES User(id))");
   }
-
-//insertion
-//  Future<int> saveUser(User user) async {
-//    var dbClient = await db;
-//    int res = await dbClient.insert("User", user.toMap());
-//    return res;
-//  }
-//
-//  //deletion
-//  Future<int> deleteUser(User user) async {
-//    var dbClient = await db;
-//    int res = await dbClient.delete("User");
-//    return res;
-//  }
 }
