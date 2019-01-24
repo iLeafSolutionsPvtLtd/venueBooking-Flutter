@@ -18,8 +18,6 @@ class AddMobileBloc extends Object with Validators implements BaseBloc {
   }
 }
 
-final addMobileNumberBloc = AddMobileBloc();
-
 abstract class BaseBloc {
   void dispose();
 }

@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:venue_booking/Modules/MobileNumberValidation/add_mobile_number_view.dart';
+import 'package:venue_booking/Modules/Blocks/blocProvider.dart';
+import 'package:venue_booking/Modules/Booking/booking_view.dart';
 import 'package:venue_booking/Modules/VerifyOTP/verify_otp_bloc.dart';
 
 class VerifyOTPView extends StatelessWidget {
-  String mobileNumber;
+  final String mobileNumber;
   VerifyOTPView(this.mobileNumber);
-  final myController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.fallback(),
-      home: Scaffold(
-        body: SafeArea(
-            child: ListView(
-          children: <Widget>[
-            emptySpaceWith(64, 0),
-            title(),
-            subtitle(),
-            otpInputView()
-          ],
-        )),
+    return BlocProvider<VerifyOTPBloc>(
+      builder: (_, bloc) {
+        return bloc ?? VerifyOTPBloc();
+      },
+      onDispose: (_, bloc) => bloc.dispose(),
+      child: MaterialApp(
+        theme: ThemeData.fallback(),
+        home: Scaffold(
+          body: SafeArea(
+              child: ListView(
+            children: <Widget>[
+              emptySpaceWith(64, 0),
+              title(),
+              subtitle(),
+              OtpBaseView()
+            ],
+          )),
+        ),
       ),
     );
   }
@@ -39,7 +45,7 @@ class VerifyOTPView extends StatelessWidget {
   Widget subtitle() => Container(
       margin: EdgeInsets.only(right: 15, left: 15),
       child: Text(
-          "A OTP (One Time Passcode) has been sent to +91${mobileNumber}. Please enter the OTP in the field below to verify.",
+          "A OTP (One Time Passcode) has been sent to +91$mobileNumber. Please enter the OTP in the field below to verify.",
           style: const TextStyle(
               color: const Color(0xffc7c7c7),
               fontWeight: FontWeight.w400,
@@ -51,6 +57,15 @@ class VerifyOTPView extends StatelessWidget {
         height: height,
         width: width,
       );
+}
+
+class OtpBaseView extends StatefulWidget {
+  @override
+  _OtpBaseViewState createState() => _OtpBaseViewState();
+}
+
+class _OtpBaseViewState extends State<OtpBaseView> {
+  final myController = TextEditingController();
 
   Widget otpInputView() => Container(
       padding: EdgeInsets.all(10.0),
@@ -104,7 +119,7 @@ class VerifyOTPView extends StatelessWidget {
                             ? Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => AddMobileView()),
+                                    builder: (context) => BookingView()),
                               )
                             : null,
                         child: new Icon(
@@ -122,4 +137,8 @@ class VerifyOTPView extends StatelessWidget {
           )
         ],
       ));
+  @override
+  Widget build(BuildContext context) {
+    return otpInputView();
+  }
 }

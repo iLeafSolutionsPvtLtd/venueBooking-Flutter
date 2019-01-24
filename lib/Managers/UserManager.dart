@@ -25,14 +25,14 @@ class UserManager {
     var dbClient = await DatabaseManager().db;
     List<Map> maps = await dbClient.rawQuery('SELECT * FROM User');
     if (maps.length > 0) {
-      return User.map(maps.first);
+      return User.fromJson(maps.first);
     }
     return null;
   }
 
   Future<int> saveUser(User user) async {
     var dbClient = await DatabaseManager().db;
-    int res = await dbClient.insert("User", user.toMap());
+    int res = await dbClient.insert("User", user.toJson());
     return res;
   }
 

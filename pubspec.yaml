@@ -29,6 +29,7 @@ dependencies:
   sqflite: any
   path_provider: ^0.4.0
   geolocator: ^2.1.1
+  progress_hud: ^1.1.0
 
 dev_dependencies:
   flutter_test:
