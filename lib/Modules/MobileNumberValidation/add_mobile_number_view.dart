@@ -6,7 +6,7 @@ import 'package:venue_booking/Modules/MobileNumberValidation/add_mobile_bloc.dar
 import 'package:venue_booking/Modules/VerifyOTP/verify_otp_view.dart';
 
 class AddMobileView extends StatelessWidget {
-  ProgressHUD _progressHUD = ProgressHUD(
+  final ProgressHUD _progressHUD = ProgressHUD(
     backgroundColor: Colors.black12,
     color: Colors.white,
     containerColor: Colors.green.withAlpha(1000),
@@ -37,22 +37,28 @@ class AddMobileView extends StatelessWidget {
               fontStyle: FontStyle.normal,
               fontSize: 16.7)));
 
-  Widget baseView() => Stack(
-        children: <Widget>[
-          ListView(
-            children: <Widget>[
-              Container(
-                height: 64,
-              ),
-              title,
-              subTitile,
-              AddMobileBaseView(),
-            ],
-          ),
-          _progressHUD,
+  Widget baseView({showLoader: bool}) {
+    if (_progressHUD.state != null) {
+      showLoader ? _progressHUD.state.show() : _progressHUD.state.dismiss();
+    }
+
+    return Stack(
+      children: <Widget>[
+        ListView(
+          children: <Widget>[
+            Container(
+              height: 64,
+            ),
+            title,
+            subTitile,
+            AddMobileBottomView(),
+          ],
+        ),
+        _progressHUD,
 //                  Container(height: 300, width: 300, child: _progressHUD)
-        ],
-      );
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,22 +73,18 @@ class AddMobileView extends StatelessWidget {
         home: Scaffold(
           body: SafeArea(
               child: FutureBuilder(
-            future: AddMobileApi("").verifyOtp(),
+            future: AddMobileApi("").generateOtp(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
-                  if (snapshot.hasData) {
-                    _progressHUD.state.show();
-                  }
-                  return baseView();
+                  print('waiting');
+                  return baseView(showLoader: true);
                 case ConnectionState.done:
-                  if (snapshot.hasData) {
-                    _progressHUD.state.dismiss();
-                  }
-                  return baseView();
-
+                  print('done');
+                  return baseView(showLoader: false);
                 default:
-                  return baseView();
+                  print('default');
+                  return baseView(showLoader: false);
               }
             },
           )),
@@ -92,12 +94,12 @@ class AddMobileView extends StatelessWidget {
   }
 }
 
-class AddMobileBaseView extends StatefulWidget {
+class AddMobileBottomView extends StatefulWidget {
   @override
-  _AddMobileBaseViewState createState() => _AddMobileBaseViewState();
+  _AddMobileBottomViewState createState() => _AddMobileBottomViewState();
 }
 
-class _AddMobileBaseViewState extends State<AddMobileBaseView> {
+class _AddMobileBottomViewState extends State<AddMobileBottomView> {
   final myController = TextEditingController();
 
   @override
@@ -153,7 +155,9 @@ class _AddMobileBaseViewState extends State<AddMobileBaseView> {
                     stream: addMobileBloc.submitCheck,
                     builder: (context, snapshot) => RawMaterialButton(
                           onPressed: () {
-                            if (snapshot.hasData) {
+                            final statusCode =
+                                AddMobileApi(myController.text).generateOtp();
+                            if (snapshot.hasData && statusCode == 200) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
